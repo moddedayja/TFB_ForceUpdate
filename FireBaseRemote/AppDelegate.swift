@@ -1,12 +1,7 @@
-//
-//  AppDelegate.swift
-//  FireBaseRemote
-//
-//  Created by Siwaporn Dee on 5/19/2560 BE.
-//  Copyright © 2560 Siwaporn Dee. All rights reserved.
-//
+
 
 import UIKit
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,9 +11,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        FIRApp.configure()
+        let _ = RCValues.sharedInstance
+        
         return true
     }
-
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
@@ -34,13 +32,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    }
+        //RCValues.sharedInstance.fetchCloudValues()
+        print ("current\(self.version())")
+        print ("forceUpdateVersion\(RCValues.sharedInstance.forceUpdateVersion())")
 
+        let currentVersion:String = self.version()
+        let forceUpdateVersion:String = RCValues.sharedInstance.forceUpdateVersion()
+        if(currentVersion.versionToInt().lexicographicallyPrecedes(forceUpdateVersion.versionToInt())){
+            print("test")
+        }
+
+        //if(RCValues.sharedInstance.forceUpdateVersion() self.version())
+        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        //print ("applicationDidBecomeActive \(String(describing: FIRRemoteConfig.remoteConfig().configValue(forKey: "appPrimaryColor").stringValue))")
+    }
+    
+    func version() -> String {
+        let dictionary = Bundle.main.infoDictionary!
+        //let version = dictionary["CFBundleShortVersionString"] as! String
+        let build = dictionary["CFBundleVersion"] as! String
+        return build
+    }
+    
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
+    
 }
+
+
+extension String {
+    func versionToInt() -> [Int] {
+        return self.components(separatedBy: ".")
+            .map { Int.init($0) ?? 0 }
+    }
+}
+//true
 

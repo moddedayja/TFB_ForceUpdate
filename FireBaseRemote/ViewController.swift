@@ -7,11 +7,13 @@
 //
 
 import UIKit
-
 class ViewController: UIViewController {
-
+    //var remoteConfig:RCValues
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        //self.remoteConfig = FIRRemoteConfig.remoteConfig()
+
         // Do any additional setup after loading the view, typically from a nib.
     }
 
