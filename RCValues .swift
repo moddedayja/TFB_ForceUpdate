@@ -32,7 +32,6 @@ class RCValues  {
         let fetchDuration: TimeInterval = 0
         // If your app is using developer mode, expirationDuration is set to 0, so each fetch will
         // retrieve values from the Remote Config service.
-        
         activateDebugMode()
         FIRRemoteConfig.remoteConfig().fetch(withExpirationDuration: fetchDuration) {
             [weak self] (status, error) in
@@ -54,6 +53,10 @@ class RCValues  {
     func forceUpdateVersion() -> String {
         let force_update_version = FIRRemoteConfig.remoteConfig().configValue(forKey: "force_update_version").stringValue
         return force_update_version!
+    }
+    func forceUpdateUrl() -> String {
+        let force_update_url = FIRRemoteConfig.remoteConfig().configValue(forKey: "force_update_url").stringValue
+        return force_update_url!
     }
     func activateDebugMode() {
         let debugSettings = FIRRemoteConfigSettings(developerModeEnabled: true)

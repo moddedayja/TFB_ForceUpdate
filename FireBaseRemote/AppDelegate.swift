@@ -38,13 +38,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let currentVersion:String = self.version()
         let forceUpdateVersion:String = RCValues.sharedInstance.forceUpdateVersion()
+        let forceUpdateUrl:String = RCValues.sharedInstance.forceUpdateUrl()
+        let url = Foundation.URL(string: forceUpdateUrl)
+        
         if(currentVersion.versionToInt().lexicographicallyPrecedes(forceUpdateVersion.versionToInt())){
-            print("test")
+            
+            let alert = UIAlertController(title: "New Version",
+                                          message: "Please ,update application to new version.",
+                                          preferredStyle: UIAlertControllerStyle.alert)
+            
+            let updateAction = UIAlertAction(title: "Update",
+                                             style: .cancel, handler: { (UIAlertAction) in
+                                                if #available(iOS 10.0, *) {
+                                                    UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+                                                } else {
+                                                    UIApplication.shared.openURL(url!)
+                                                }
+            })
+            
+            alert.addAction(updateAction)
+            
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+
+            appDelegate.window?.rootViewController?.present(alert, animated: true, completion: nil)
+            
+
+
         }
 
-        //if(RCValues.sharedInstance.forceUpdateVersion() self.version())
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        //print ("applicationDidBecomeActive \(String(describing: FIRRemoteConfig.remoteConfig().configValue(forKey: "appPrimaryColor").stringValue))")
     }
     
     func version() -> String {
